@@ -1,3 +1,24 @@
+Element.prototype.appendAfter = function (elem) {
+  elem.parentNode.insertBefore(this, elem.nextSibling)
+}
+
+function _createModalFooter(buttons = []) {
+  if (buttons.length === 0) {
+    return document.createElement('div')
+  }
+  const wrap = document.createElement('div')
+  wrap.classList.add('modal-footer')
+  buttons.forEach((btn) => {
+    const $btn = document.createElement('button')
+    $btn.classList.add('btn')
+    $btn.classList.add(`btn-${btn.type || 'secondary'}`)
+    $btn.innerHTML = btn.text
+    $btn.addEventListener('click', btn.handler)
+    wrap.appendChild($btn)
+  })
+  return wrap
+}
+
 function _createModal(options) {
   const DEFAULT_WIDTH = '200px'
   const modal = document.createElement('div')
@@ -13,13 +34,12 @@ function _createModal(options) {
 				 <div class="modal-body" data-content>
 						${options.content || ''}
 				 </div>
-				 <div class="modal-footer">
-					 <button>Ok</button>
-					 <button>Cancel</button>
-				 </div>
+
 			 </div>
 		 </div>`
   )
+  const footer = _createModalFooter(options.buttons)
+  footer.appendAfter(modal.querySelector('[data-content]'))
   document.body.appendChild(modal)
   return modal
 }
@@ -29,6 +49,7 @@ $.modal = function (options) {
   const $modal = _createModal(options)
   let closing = false
   let destroyed = false
+
   const modal = {
     open() {
       if (destroyed) {
@@ -49,7 +70,6 @@ $.modal = function (options) {
   const listener = (event) => {
     if (event.target.dataset.close) {
       modal.close()
-      console.log(event.target.dataset)
     }
   }
   $modal.addEventListener('click', listener)
