@@ -33,6 +33,7 @@ function _createModal(options) {
 				 </div>
 				 <div class="modal-body" data-content>
 						${options.content || ''}
+            Price:  <strong>${options.price}</strong>
 				 </div>
 
 			 </div>
@@ -64,6 +65,9 @@ $.modal = function (options) {
       setTimeout(() => {
         $modal.classList.remove('hide')
         closing = false
+        if (typeof options.onClose === 'function') {
+          options.onClose()
+        }
       }, ANIMATION_SPEED)
     },
   }

@@ -76,3 +76,11 @@
   padding: 5px 10px;
   border-top: 1px solid #eee;
 }
+
+.row img {
+  display: flex;
+  height: 400px;
+}
+.col {
+  max-width: 400px;
+}
